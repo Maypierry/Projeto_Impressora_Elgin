@@ -13,6 +13,24 @@ Este documento é um roteiro para registrar os testes do projeto. Ele não é um
 
 **Atenção:** não marque um teste como realizado apenas porque o código foi escrito ou compilado. O teste físico exige executar a função com a impressora conectada.
 
+## Parâmetros indicados no enunciado
+
+Use estes parâmetros de referência ao conferir o código e executar os testes:
+
+| Recurso | Chamada/valores do professor |
+|---|---|
+| Conexão USB | tipo `1`, modelo `i9`, conexão `USB`, parâmetro `0` |
+| Texto | `ImpressaoTexto(texto, 1, 4, 0)`; retorno não negativo indica sucesso; depois `Corte(5)` |
+| QR Code | `ImpressaoQRCode(dados, 6, 4)`; depois `Corte(5)` |
+| Código de barras | `ImpressaoCodigoBarras(8, "{A012345678912", 100, 2, 3)`; depois `Corte(5)` |
+| XML SAT | `ImprimeXMLSAT(dadosXML, 0)`; liberar `dadosXML` com `free()` |
+| Cancelamento SAT | `ImprimeXMLCancelamentoSAT(dadosXML, ASS_QRCODE, 0)`; liberar `dadosXML` com `free()` |
+| Gaveta Elgin | `AbreGavetaElgin(1, 50, 50)` |
+| Gaveta (outro comando) | `AbreGaveta(1, 5, 10)` |
+| Sinal sonoro | `SinalSonoro(4, 50, 5)` |
+
+Os comandos em geral indicam sucesso com retorno `0`. A exceção descrita no PDF é `ImpressaoTexto`, em que o erro é indicado por retorno negativo.
+
 ## Teste 1 — Inicialização e conexão da impressora
 
 **Objetivo:** verificar se o programa carrega a biblioteca, configura os parâmetros e consegue abrir e fechar a conexão.
