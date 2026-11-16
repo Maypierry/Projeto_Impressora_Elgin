@@ -78,10 +78,10 @@ Consulte [docs/PLANO_DE_TESTES.md](docs/PLANO_DE_TESTES.md). Registre separadame
 - Enunciado: `Trabalho_C_Impressora.pdf` (adicionar em `docs/` se a divulgação for permitida).
 
 ## Autores
-Preencher com os nomes reais dos integrantes, em ordem alfabética:
-- [Nome do integrante 1]
-- [Nome do integrante 2]
-- [Nome do integrante 3]
+- Guilherme da Silva Damas
+- Julia Mendonça da Silva
+- Matheus Henrique Lima da Silva
+- Mayara D'Assunção Silva
 
 ## Estado dos testes
 O código foi preenchido a partir do material do professor. Ainda é necessário compilar no Dev-C++/MinGW para Windows e testar com a impressora física. Esses testes precisam ser realizados pela equipe e registrados no plano de testes.
