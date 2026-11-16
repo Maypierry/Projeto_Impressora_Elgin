@@ -84,4 +84,4 @@ Preencher com os nomes reais dos integrantes, em ordem alfabética:
 - [Nome do integrante 3]
 
 ## Estado dos testes
-O código foi revisado a partir do material do professor e passou por verificação de sintaxe em ambiente de checagem. Isso não substitui a compilação no Dev-C++/MinGW para Windows nem o teste com a impressora física. Esses testes ainda precisam ser realizados e registrados.
+O código foi preenchido a partir do material do professor. Ainda é necessário compilar no Dev-C++/MinGW para Windows e testar com a impressora física. Esses testes precisam ser realizados pela equipe e registrados no plano de testes.
