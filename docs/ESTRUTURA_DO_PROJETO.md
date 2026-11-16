@@ -1,16 +1,16 @@
 # Estrutura do projeto
 
-## Objetivo
+## Organização do repositório
 
-Organizar os materiais do trabalho escolar de controle de uma impressora térmica Elgin i9 em C.
-
-## Arquivos e pastas
+O enunciado determina que o programa fique em um único arquivo C, `main.c`. Os dois XMLs de teste também precisam ficar na raiz/pasta de execução.
 
 ```text
 Projeto_Impressora_Elgin/
 ├── .gitignore
 ├── README.md
 ├── main.c
+├── XMLSAT.xml
+├── CANC_SAT.xml
 └── docs/
     ├── ARQUIVOS_NECESSARIOS.md
     ├── COMO_USAR_O_REPOSITORIO.md
@@ -18,25 +18,19 @@ Projeto_Impressora_Elgin/
     └── PLANO_DE_TESTES.md
 ```
 
-## Sobre o main.c
+A DLL `E1_Impressora01.dll` também deve ficar na pasta de execução no computador usado para testar. Ela não aparece obrigatoriamente na árvore pública porque é uma biblioteca binária de terceiros e sua redistribuição precisa ser autorizada.
 
-O arquivo `main.c` presente neste momento é apenas um marcador de organização. Ele ainda não contém a implementação do programa. A equipe deve substituí-lo pelo código real, usando o código-base e as assinaturas oficiais fornecidas pelo professor.
+## Função de cada item
+- `main.c`: programa em C, com login, menu, comunicação com a DLL e funções de impressão.
+- `XMLSAT.xml`: dados de demonstração para impressão SAT.
+- `CANC_SAT.xml`: dados de demonstração para impressão do cancelamento SAT.
+- `E1_Impressora01.dll`: biblioteca da Elgin necessária em tempo de execução; manter localmente e usar a arquitetura correta.
+- `README.md`: objetivo, requisitos, login, menu e instruções de execução.
+- `docs/`: documentos de orientação e registro dos testes.
 
-Não inventar protótipos, typedefs, parâmetros ou nomes de funções da DLL. Conferir tudo no material original.
+## Regra dos caminhos
 
-## Requisitos funcionais a acompanhar
+O programa abre `XMLSAT.xml`, `CANC_SAT.xml` e `E1_Impressora01.dll` pelo nome. Portanto, esses arquivos precisam estar no diretório de trabalho usado ao executar o programa. Não basta deixá-los dentro de `docs/`.
 
-- Login com até três tentativas.
-- Menu em laço com opções 1 a 11 e 0 para sair.
-- Configuração, abertura e fechamento da conexão.
-- Impressão de texto, QR Code e código de barras.
-- Impressão de XML SAT e de XML de cancelamento SAT.
-- Abertura da gaveta pelos dois comandos exigidos.
-- Sinal sonoro.
-- Bloqueio de operações de impressão quando a conexão estiver fechada.
-- Verificação dos valores de retorno.
-- Liberação da memória usada para carregar XML.
-
-## O que ainda depende dos materiais oficiais
-
-A implementação do código, os protótipos e parâmetros da DLL, os nomes/caminhos exatos dos XMLs e os procedimentos finais de compilação devem ser conferidos com o PDF, o código e os exemplos entregues pelo professor.
+## Estado
+O `main.c` foi preenchido a partir do código-base e das orientações do PDF. A equipe ainda precisa compilar no Dev-C++ de 64 bits e testar cada comando com a impressora física. A verificação de sintaxe não comprova funcionamento do hardware.
