@@ -1,37 +1,87 @@
-# Projeto Impressora Elgin i9
+# Controle de Impressora Térmica Elgin i8/i9
 
-Projeto escolar em C para controle de uma impressora térmica Elgin i9.
+Projeto escolar em linguagem C para controlar uma impressora térmica Elgin i8 ou i9 por meio da biblioteca oficial `E1_Impressora01.dll`.
 
-## Ambiente previsto
+O programa possui login, menu de opções e comandos para imprimir textos, QR Code, código de barras e documentos SAT, além de acionar a gaveta de dinheiro e o sinal sonoro.
 
-- Linguagem C
-- Dev-C++ 64 bits
-- Impressora Elgin i9
-- DLL `E1_Impressora01.dll` x64 (uso sujeito à licença e à disponibilidade do arquivo)
+## Requisitos e ambiente
+- Linguagem C e Windows.
+- Dev-C++ configurado com compilador de 64 bits (ambiente definido pela equipe).
+- Impressora Elgin i9 (ou i8, conforme configuração).
+- DLL `E1_Impressora01.dll` com a mesma arquitetura do compilador.
+- Arquivos de teste `XMLSAT.xml` e `CANC_SAT.xml`.
 
-## Funcionalidades exigidas/previstas
+## Login de teste
+- Usuário: `admin`
+- Senha: `1234`
+- Máximo de três tentativas.
 
-- Login com até três tentativas.
-- Menu com opções de 1 a 11 e 0 para sair.
-- Configuração e controle da conexão.
-- Impressão de texto, QR Code e código de barras.
-- Impressão de XML SAT e cancelamento SAT.
-- Abertura da gaveta de dinheiro pelos dois comandos previstos.
-- Sinal sonoro.
-- Verificação dos retornos e liberação de memória.
-- Impedir perguntas e operações de impressão quando a conexão estiver fechada.
+## Opções do menu
+
+| Opção | Ação |
+|---:|---|
+| 1 | Configurar conexão |
+| 2 | Abrir conexão |
+| 3 | Fechar conexão |
+| 4 | Imprimir texto |
+| 5 | Imprimir QR Code |
+| 6 | Imprimir código de barras |
+| 7 | Imprimir XML SAT |
+| 8 | Imprimir XML de cancelamento SAT |
+| 9 | Abrir gaveta (comando Elgin) |
+| 10 | Abrir gaveta (outro comando) |
+| 11 | Emitir sinal sonoro |
+| 0 | Sair |
+
+As operações que usam a impressora verificam se a conexão está aberta antes de pedir dados ou enviar comandos.
+
+## Arquivos na pasta de execução
+
+```text
+Projeto_Impressora_Elgin/
+├── main.c
+├── E1_Impressora01.dll
+├── XMLSAT.xml
+└── CANC_SAT.xml
+```
+
+O PDF e a documentação podem ficar em `docs/`. A DLL precisa ter a mesma arquitetura do compilador e estar na pasta de execução. O arquivo DLL avulso recebido foi identificado como x64; o ZIP contém versões x64 e x86. Não publique a DLL ou o ZIP no repositório público sem autorização para redistribuição.
+
+## Compilar e executar
+
+### Dev-C++
+1. Abra ou crie um projeto de Console em C.
+2. Use o `main.c` deste repositório.
+3. Confirme que o compilador é de 64 bits.
+4. Coloque a DLL x64 e os dois XMLs na pasta de execução.
+5. Compile e execute no Windows.
+6. Para USB, o enunciado sugere: tipo `1`, modelo `i9`, conexão `USB`, parâmetro `0`.
+
+### Terminal MinGW 64 bits
+Na pasta que contém os arquivos:
+
+```bash
+gcc main.c -o impressora.exe
+./impressora.exe
+```
+
+Não envie o executável gerado ao GitHub.
+
+## Testes
+Consulte [docs/PLANO_DE_TESTES.md](docs/PLANO_DE_TESTES.md). Registre separadamente compilação e teste com a impressora física. Não marque testes como aprovados antes de executá-los.
 
 ## Documentação
-
 - [Estrutura do projeto](docs/ESTRUTURA_DO_PROJETO.md)
-- [Arquivos oficiais necessários](docs/ARQUIVOS_NECESSARIOS.md)
+- [Arquivos necessários](docs/ARQUIVOS_NECESSARIOS.md)
+- [Como usar o repositório](docs/COMO_USAR_O_REPOSITORIO.md)
 - [Plano de testes](docs/PLANO_DE_TESTES.md)
-- [Como usar o repositório e colaborar](docs/COMO_USAR_O_REPOSITORIO.md)
+- Enunciado: `Trabalho_C_Impressora.pdf` (adicionar em `docs/` se a divulgação for permitida).
 
-## Estado atual
+## Autores
+Preencher com os nomes reais dos integrantes, em ordem alfabética:
+- [Nome do integrante 1]
+- [Nome do integrante 2]
+- [Nome do integrante 3]
 
-O repositório contém a documentação inicial e um marcador em `main.c`. **O marcador não é a implementação do programa e deve ser substituído pelo código real da equipe**, conferido com o material oficial do professor.
-
-Os arquivos oficiais (PDF, código-base, documentação da DLL e XMLs de demonstração) ainda precisam ser adicionados/conferidos. A DLL não deve ser publicada sem verificar a permissão de redistribuição. Não publique XMLs fiscais reais ou com dados pessoais.
-
-Nenhum teste de compilação ou teste físico é declarado como realizado neste README. Consulte o plano de testes para registrar os resultados quando forem executados.
+## Estado dos testes
+O código foi revisado a partir do material do professor e passou por verificação de sintaxe em ambiente de checagem. Isso não substitui a compilação no Dev-C++/MinGW para Windows nem o teste com a impressora física. Esses testes ainda precisam ser realizados e registrados.
