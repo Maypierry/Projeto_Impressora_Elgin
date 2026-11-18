@@ -2,6 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <windows.h>
+#include <errno.h>
+#include <limits.h>
+#include <ctype.h>
 
 /*
  * Controle da impressora Elgin i8/i9 em C.
@@ -56,6 +59,7 @@ static int tipo = 1;
 static char modelo[50] = "i9";
 static char conexao[50] = "USB";
 static int parametro = 0;
+static int entradaEncerrada = 0;
 
 /* Chave QR Code correspondente ao XML de cancelamento fornecido. */
 static const char *ASS_QRCODE =
@@ -70,7 +74,7 @@ static int carregaFuncao(void *destino, const char *nome) {
         printf("Comando '%s' nao encontrado na DLL.\n", nome);
         return 0;
     }
-    *(FARPROC *)destino = funcao;
+    memcpy(destino, &funcao, sizeof(funcao));
     return 1;
 }
 
@@ -106,23 +110,39 @@ static int carregarDLL(void) {
 }
 
 static void capturarEntrada(const char *mensagem, char *destino, int tamanho) {
+    int caractere;
+    size_t comprimento;
     printf("%s", mensagem);
     if (fgets(destino, tamanho, stdin) == NULL) {
         destino[0] = '\0';
+        entradaEncerrada = 1;
         return;
+    }
+    comprimento = strlen(destino);
+    if (comprimento > 0 && destino[comprimento - 1] != '\n' && !feof(stdin)) {
+        while ((caractere = getchar()) != '\n' && caractere != EOF) {
+            /* Descarta o restante da linha para nao contaminar a proxima leitura. */
+        }
+        printf("Aviso: entrada muito longa; o excesso foi descartado.\n");
     }
     destino[strcspn(destino, "\r\n")] = '\0';
 }
 
 static int lerInteiro(const char *mensagem) {
-    char linha[50];
+    char linha[64];
     char *fim;
-    while (1) {
+    long valor;
+    while (!entradaEncerrada) {
+        errno = 0;
         capturarEntrada(mensagem, linha, sizeof(linha));
-        long valor = strtol(linha, &fim, 10);
-        if (linha[0] != '\0' && *fim == '\0') return (int)valor;
-        printf("Digite apenas numeros!\n");
+        if (entradaEncerrada) return 0;
+        valor = strtol(linha, &fim, 10);
+        while (*fim != '\0' && isspace((unsigned char)*fim)) fim++;
+        if (linha[0] != '\0' && *fim == '\0' &&
+            errno != ERANGE && valor >= INT_MIN && valor <= INT_MAX) return (int)valor;
+        printf("Digite um numero inteiro valido!\n");
     }
+    return 0;
 }
 
 static char *lerArquivo(const char *nome) {
@@ -157,15 +177,33 @@ static char *lerArquivo(const char *nome) {
 }
 
 void configurarConexao(void) {
+    char novoModelo[50];
     if (conexaoAberta) {
         printf("Conexao ja esta aberta. Feche-a antes de alterar os parametros.\n");
         return;
     }
-    tipo = lerInteiro("Tipo de conexao (1 USB, 2 Serial, 3 Rede, 4 Bluetooth): ");
-    capturarEntrada("Modelo da impressora (i8/i9): ", modelo, sizeof(modelo));
+    do {
+        tipo = lerInteiro("Tipo de conexao (1 USB, 2 Serial, 3 Rede, 4 Bluetooth): ");
+        if (entradaEncerrada) return;
+        if (tipo < 1 || tipo > 4) printf("Tipo invalido. Escolha de 1 a 4.\n");
+    } while (tipo < 1 || tipo > 4);
+    do {
+        capturarEntrada("Modelo da impressora (i8/i9): ", novoModelo, sizeof(novoModelo));
+        if (entradaEncerrada) return;
+        if (strcmp(novoModelo, "i8") != 0 && strcmp(novoModelo, "i9") != 0)
+            printf("Modelo invalido. Informe i8 ou i9.\n");
+    } while (strcmp(novoModelo, "i8") != 0 && strcmp(novoModelo, "i9") != 0);
+    strcpy(modelo, novoModelo);
     capturarEntrada("Porta/conexao (ex: USB): ", conexao, sizeof(conexao));
-    parametro = lerInteiro("Parametro adicional (0 para USB): ");
-    printf("Parametros configurados.\n");
+    if (entradaEncerrada) return;
+    parametro = lerInteiro("Parametro adicional (0 para USB/Bluetooth): ");
+    if (entradaEncerrada) return;
+    if ((tipo == 1 || tipo == 4) && parametro != 0) {
+        printf("Para USB ou Bluetooth, o parametro adicional sera ajustado para 0.\n");
+        parametro = 0;
+    }
+    printf("Parametros configurados: tipo=%d, modelo=%s, conexao=%s, parametro=%d.\n",
+           tipo, modelo, conexao, parametro);
 }
 
 void abrirConexao(void) {
@@ -197,102 +235,115 @@ void fecharConexao(void) {
 }
 
 void imprimirTexto(void) {
+    char texto[200];
+    int copias, algumaCopia = 0;
     if (!conexaoAberta) {
         printf("Conexao fechada. Abra a conexao antes (opcao 2).\n");
         return;
     }
-    char texto[200];
     capturarEntrada("Texto a imprimir: ", texto, sizeof(texto));
-    int copias = lerInteiro("Quantas copias? ");
+    if (entradaEncerrada || texto[0] == '\0') {
+        printf("Nenhum texto informado.\n");
+        return;
+    }
+    copias = lerInteiro("Quantas copias? ");
+    if (entradaEncerrada) return;
     if (copias <= 0) {
         printf("A quantidade de copias deve ser maior que zero.\n");
         return;
     }
-
     for (int i = 1; i <= copias; i++) {
         int retorno = ImpressaoTexto(texto, 1, 4, 0);
-        if (retorno >= 0) printf("Copia %d enviada para impressao.\n", i);
-        else printf("Erro ao imprimir texto. Codigo: %d\n", retorno);
+        if (retorno >= 0) {
+            algumaCopia = 1;
+            printf("Copia %d enviada para impressao.\n", i);
+        } else printf("Erro ao imprimir texto. Codigo: %d\n", retorno);
     }
-    int corte = Corte(5);
-    if (corte == 0) printf("Corte realizado.\n");
-    else printf("Erro ao cortar papel. Codigo: %d\n", corte);
+    if (algumaCopia) {
+        int corte = Corte(5);
+        if (corte == 0) printf("Corte realizado.\n");
+        else printf("Erro ao cortar papel. Codigo: %d\n", corte);
+    }
 }
 
 void imprimirQRCode(void) {
+    char dados[500];
+    int retorno, corte;
     if (!conexaoAberta) {
         printf("Conexao fechada. Abra a conexao antes (opcao 2).\n");
         return;
     }
-    char dados[500];
     capturarEntrada("Conteudo do QR Code: ", dados, sizeof(dados));
-    int retorno = ImpressaoQRCode(dados, 6, 4);
-    if (retorno == 0) printf("QR Code enviado para impressao.\n");
-    else printf("Erro ao imprimir QR Code. Codigo: %d\n", retorno);
-
-    int corte = Corte(5);
-    if (corte == 0) printf("Corte realizado.\n");
-    else printf("Erro ao cortar papel. Codigo: %d\n", corte);
+    if (entradaEncerrada || dados[0] == '\0') {
+        printf("Nenhum conteudo informado.\n");
+        return;
+    }
+    retorno = ImpressaoQRCode(dados, 6, 4);
+    if (retorno == 0) {
+        printf("QR Code enviado para impressao.\n");
+        corte = Corte(5);
+        if (corte == 0) printf("Corte realizado.\n");
+        else printf("Erro ao cortar papel. Codigo: %d\n", corte);
+    } else printf("Erro ao imprimir QR Code. Codigo: %d\n", retorno);
 }
 
 void imprimirCodigoBarras(void) {
+    int retorno, corte;
     if (!conexaoAberta) {
         printf("Conexao fechada. Abra a conexao antes (opcao 2).\n");
         return;
     }
-    int retorno = ImpressaoCodigoBarras(8, "{A012345678912", 100, 2, 3);
-    if (retorno == 0) printf("Codigo de barras enviado para impressao.\n");
-    else printf("Erro ao imprimir codigo de barras. Codigo: %d\n", retorno);
-
-    int corte = Corte(5);
-    if (corte == 0) printf("Corte realizado.\n");
-    else printf("Erro ao cortar papel. Codigo: %d\n", corte);
+    retorno = ImpressaoCodigoBarras(8, "{A012345678912", 100, 2, 3);
+    if (retorno == 0) {
+        printf("Codigo de barras enviado para impressao.\n");
+        corte = Corte(5);
+        if (corte == 0) printf("Corte realizado.\n");
+        else printf("Erro ao cortar papel. Codigo: %d\n", corte);
+    } else printf("Erro ao imprimir codigo de barras. Codigo: %d\n", retorno);
 }
 
 void imprimirXMLSAT(void) {
+    char *dadosXML;
+    int retorno, corte;
     if (!conexaoAberta) {
         printf("Conexao fechada. Abra a conexao antes (opcao 2).\n");
         return;
     }
-    char *dadosXML = lerArquivo("XMLSAT.xml");
+    dadosXML = lerArquivo("XMLSAT.xml");
     if (dadosXML == NULL) {
-        printf("Nao foi possivel ler XMLSAT.xml.\n");
+        printf("Nao foi possivel ler XMLSAT.xml. Confira a pasta de execucao.\n");
         return;
     }
-
-    int retorno = ImprimeXMLSAT(dadosXML, 0);
+    retorno = ImprimeXMLSAT(dadosXML, 0);
     free(dadosXML);
     if (retorno == 0) {
         printf("XML SAT enviado para impressao.\n");
-        int corte = Corte(5);
+        corte = Corte(5);
         if (corte == 0) printf("Corte realizado.\n");
         else printf("Erro ao cortar papel. Codigo: %d\n", corte);
-    } else {
-        printf("Erro ao imprimir XML SAT. Codigo: %d\n", retorno);
-    }
+    } else printf("Erro ao imprimir XML SAT. Codigo: %d\n", retorno);
 }
 
 void imprimirXMLCancelamentoSAT(void) {
+    char *dadosXML;
+    int retorno, corte;
     if (!conexaoAberta) {
         printf("Conexao fechada. Abra a conexao antes (opcao 2).\n");
         return;
     }
-    char *dadosXML = lerArquivo("CANC_SAT.xml");
+    dadosXML = lerArquivo("CANC_SAT.xml");
     if (dadosXML == NULL) {
-        printf("Nao foi possivel ler CANC_SAT.xml.\n");
+        printf("Nao foi possivel ler CANC_SAT.xml. Confira a pasta de execucao.\n");
         return;
     }
-
-    int retorno = ImprimeXMLCancelamentoSAT(dadosXML, ASS_QRCODE, 0);
+    retorno = ImprimeXMLCancelamentoSAT(dadosXML, ASS_QRCODE, 0);
     free(dadosXML);
     if (retorno == 0) {
         printf("XML de cancelamento SAT enviado para impressao.\n");
-        int corte = Corte(5);
+        corte = Corte(5);
         if (corte == 0) printf("Corte realizado.\n");
         else printf("Erro ao cortar papel. Codigo: %d\n", corte);
-    } else {
-        printf("Erro ao imprimir XML de cancelamento SAT. Codigo: %d\n", retorno);
-    }
+    } else printf("Erro ao imprimir XML de cancelamento SAT. Codigo: %d\n", retorno);
 }
 
 void abrirGavetaElgin(void) {
