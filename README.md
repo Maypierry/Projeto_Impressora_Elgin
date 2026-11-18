@@ -67,6 +67,10 @@ gcc main.c -o impressora.exe
 
 Não envie o executável gerado ao GitHub.
 
+## Referencia de implementacao
+
+A organizacao geral do fluxo e dos comandos tambem foi estudada a partir do projeto [sistema-impressora-elgin-c, de Lucas Libano](https://github.com/LucasLibano/sistema-impressora-elgin-c). A implementacao deste grupo foi adaptada ao enunciado do professor e ao codigo-base fornecido; nao e uma copia literal. As diferencas e correcoes relevantes estao em [docs/REFERENCIAS.md](docs/REFERENCIAS.md).
+
 ## Testes
 Consulte [docs/PLANO_DE_TESTES.md](docs/PLANO_DE_TESTES.md). Registre separadamente compilação e teste com a impressora física. Não marque testes como aprovados antes de executá-los.
 
@@ -75,6 +79,7 @@ Consulte [docs/PLANO_DE_TESTES.md](docs/PLANO_DE_TESTES.md). Registre separadame
 - [Arquivos necessários](docs/ARQUIVOS_NECESSARIOS.md)
 - [Como usar o repositório](docs/COMO_USAR_O_REPOSITORIO.md)
 - [Plano de testes](docs/PLANO_DE_TESTES.md)
+- [Referencias e decisoes de implementacao](docs/REFERENCIAS.md)
 - Enunciado: `Trabalho_C_Impressora.pdf` (adicionar em `docs/` se a divulgação for permitida).
 
 ## Autores
@@ -84,4 +89,4 @@ Consulte [docs/PLANO_DE_TESTES.md](docs/PLANO_DE_TESTES.md). Registre separadame
 - Mayara D'Assunção Silva
 
 ## Estado dos testes
-O código foi preenchido a partir do material do professor. Ainda é necessário compilar no Dev-C++/MinGW para Windows e testar com a impressora física. Esses testes precisam ser realizados pela equipe e registrados no plano de testes.
+O código foi desenvolvido a partir do código-base e dos requisitos do professor, usando também o projeto de Lucas Libano como referência de implementação. A versão atual ainda precisa ser compilada no Dev-C++ de 64 bits e testada com a impressora física. Esses testes não foram executados por esta revisão e devem ser registrados no plano de testes.
