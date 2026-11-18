@@ -26,7 +26,7 @@ A DLL `E1_Impressora01.dll` também deve ficar na pasta de execução no computa
 - `CANC_SAT.xml`: dados de demonstração para impressão do cancelamento SAT.
 - `E1_Impressora01.dll`: biblioteca da Elgin necessária em tempo de execução; manter localmente e usar a arquitetura correta.
 - `README.md`: objetivo, requisitos, login, menu e instruções de execução.
-- `docs/`: documentos de orientação e registro dos testes.
+- `docs/`: documentos de orientação, referências de implementação e registro dos testes.
 
 ## Regra dos caminhos
 
