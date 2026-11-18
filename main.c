@@ -138,7 +138,7 @@ static int lerInteiro(const char *mensagem) {
         if (entradaEncerrada) return 0;
         valor = strtol(linha, &fim, 10);
         while (*fim != '\0' && isspace((unsigned char)*fim)) fim++;
-        if (linha[0] != '\0' && *fim == '\0' &&
+        if (fim != linha && *fim == '\0' &&
             errno != ERANGE && valor >= INT_MIN && valor <= INT_MAX) return (int)valor;
         printf("Digite um numero inteiro valido!\n");
     }
