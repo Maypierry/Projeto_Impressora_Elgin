@@ -1,6 +1,6 @@
 # Controle de Impressora Térmica Elgin i8/i9
 
-Projeto escolar em linguagem C para controlar uma impressora térmica Elgin i8 ou i9 por meio da biblioteca oficial `E1_Impressora01.dll`.
+Projeto escolar em linguagem C para controlar uma impressora térmica Elgin i8 ou i9 por meio da biblioteca `E1_Impressora01.dll`.
 
 O programa possui login, menu de opções e comandos para imprimir textos, QR Code, código de barras e documentos SAT, além de acionar a gaveta de dinheiro e o sinal sonoro.
 
@@ -8,7 +8,7 @@ O programa possui login, menu de opções e comandos para imprimir textos, QR Co
 - Linguagem C e Windows.
 - Dev-C++ configurado com compilador de 64 bits (ambiente definido pela equipe).
 - Impressora Elgin i9 (ou i8, conforme configuração).
-- DLL `E1_Impressora01.dll` com a mesma arquitetura do compilador.
+- DLL `E1_Impressora01.dll` x64, compatível com o compilador.
 - Arquivos de teste `XMLSAT.xml` e `CANC_SAT.xml`.
 
 ## Login de teste
@@ -45,17 +45,17 @@ Projeto_Impressora_Elgin/
 └── CANC_SAT.xml
 ```
 
-O PDF e a documentação podem ficar em `docs/`. A DLL precisa ter a mesma arquitetura do compilador e estar na pasta de execução. O arquivo DLL avulso recebido foi identificado como x64; o ZIP contém versões x64 e x86. Não publique a DLL ou o ZIP no repositório público sem autorização para redistribuição.
+A DLL x64 e os dois XMLs devem estar na pasta de execução. O arquivo DLL incluído no ZIP enviado foi identificado como x64. Não publique a DLL ou o ZIP da biblioteca no repositório público sem autorização para redistribuição.
 
 ## Compilar e executar
 
 ### Dev-C++
 1. Abra ou crie um projeto de Console em C.
-2. Use o `main.c` deste repositório.
-3. Confirme que o compilador é de 64 bits.
-4. Coloque a DLL x64 e os dois XMLs na pasta de execução.
+2. Use o arquivo `main.c` deste repositório.
+3. Confirme que o compilador selecionado é de 64 bits.
+4. Coloque a DLL x64 e os dois XMLs na pasta de execução do programa.
 5. Compile e execute no Windows.
-6. Para USB, o enunciado sugere: tipo `1`, modelo `i9`, conexão `USB`, parâmetro `0`.
+6. Para USB, configure: tipo `1`, modelo `i9`, conexão `USB`, parâmetro `0`.
 
 ### Terminal MinGW 64 bits
 Na pasta que contém os arquivos:
@@ -67,11 +67,12 @@ gcc main.c -o impressora.exe
 
 Não envie o executável gerado ao GitHub.
 
-## Referencia de implementacao
+## Referência de implementação
 
-A organizacao geral do fluxo e dos comandos tambem foi estudada a partir do projeto [sistema-impressora-elgin-c, de Lucas Libano](https://github.com/LucasLibano/sistema-impressora-elgin-c). A implementacao deste grupo foi adaptada ao enunciado do professor e ao codigo-base fornecido; nao e uma copia literal. As diferencas e correcoes relevantes estao em [docs/REFERENCIAS.md](docs/REFERENCIAS.md).
+A organização geral do fluxo e dos comandos também foi estudada a partir do projeto [sistema-impressora-elgin-c, de Lucas Libano](https://github.com/LucasLibano/sistema-impressora-elgin-c). A implementação deste grupo foi adaptada ao enunciado do professor e ao código-base fornecido; não é uma cópia literal. As diferenças e correções relevantes estão em [docs/REFERENCIAS.md](docs/REFERENCIAS.md).
 
 ## Testes
+
 Consulte [docs/PLANO_DE_TESTES.md](docs/PLANO_DE_TESTES.md). Registre separadamente compilação e teste com a impressora física. Não marque testes como aprovados antes de executá-los.
 
 ## Documentação
@@ -79,7 +80,7 @@ Consulte [docs/PLANO_DE_TESTES.md](docs/PLANO_DE_TESTES.md). Registre separadame
 - [Arquivos necessários](docs/ARQUIVOS_NECESSARIOS.md)
 - [Como usar o repositório](docs/COMO_USAR_O_REPOSITORIO.md)
 - [Plano de testes](docs/PLANO_DE_TESTES.md)
-- [Referencias e decisoes de implementacao](docs/REFERENCIAS.md)
+- [Referências e decisões de implementação](docs/REFERENCIAS.md)
 - Enunciado: `Trabalho_C_Impressora.pdf` (adicionar em `docs/` se a divulgação for permitida).
 
 ## Autores
@@ -89,4 +90,4 @@ Consulte [docs/PLANO_DE_TESTES.md](docs/PLANO_DE_TESTES.md). Registre separadame
 - Mayara D'Assunção Silva
 
 ## Estado dos testes
-O código foi desenvolvido a partir do código-base e dos requisitos do professor, usando também o projeto de Lucas Libano como referência de implementação. A versão atual ainda precisa ser compilada no Dev-C++ de 64 bits e testada com a impressora física. Esses testes não foram executados por esta revisão e devem ser registrados no plano de testes.
+A versão atual do código ainda precisa ser compilada no Dev-C++ de 64 bits e testada com a impressora física. Esses testes não devem ser considerados aprovados antes de sua execução e do registro dos resultados no plano de testes.
