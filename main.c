@@ -10,25 +10,25 @@
  */
 
 /* Assinaturas dos comandos exportados pela DLL. */
-typedef int (*FnAbreConexaoImpressora)(int, const char *, const char *, int);
-typedef int (*FnFechaConexaoImpressora)(void);
-typedef int (*FnImpressaoTexto)(const char *, int, int, int);
-typedef int (*FnCorte)(int);
-typedef int (*FnImpressaoQRCode)(const char *, int, int);
-typedef int (*FnImpressaoCodigoBarras)(int, const char *, int, int, int);
-typedef int (*FnAvancaPapel)(int);
-typedef int (*FnStatusImpressora)(int);
-typedef int (*FnAbreGavetaElgin)(int, int, int);
-typedef int (*FnAbreGaveta)(int, int, int);
-typedef int (*FnSinalSonoro)(int, int, int);
-typedef int (*FnModoPagina)(void);
-typedef int (*FnLimpaBufferModoPagina)(void);
-typedef int (*FnImprimeModoPagina)(void);
-typedef int (*FnModoPadrao)(void);
-typedef int (*FnPosicaoImpressaoHorizontal)(int);
-typedef int (*FnPosicaoImpressaoVertical)(int);
-typedef int (*FnImprimeXMLSAT)(const char *, int);
-typedef int (*FnImprimeXMLCancelamentoSAT)(const char *, const char *, int);
+typedef int (WINAPI *FnAbreConexaoImpressora)(int, const char *, const char *, int);
+typedef int (WINAPI *FnFechaConexaoImpressora)(void);
+typedef int (WINAPI *FnImpressaoTexto)(const char *, int, int, int);
+typedef int (WINAPI *FnCorte)(int);
+typedef int (WINAPI *FnImpressaoQRCode)(const char *, int, int);
+typedef int (WINAPI *FnImpressaoCodigoBarras)(int, const char *, int, int, int);
+typedef int (WINAPI *FnAvancaPapel)(int);
+typedef int (WINAPI *FnStatusImpressora)(int);
+typedef int (WINAPI *FnAbreGavetaElgin)(int, int, int);
+typedef int (WINAPI *FnAbreGaveta)(int, int, int);
+typedef int (WINAPI *FnSinalSonoro)(int, int, int);
+typedef int (WINAPI *FnModoPagina)(void);
+typedef int (WINAPI *FnLimpaBufferModoPagina)(void);
+typedef int (WINAPI *FnImprimeModoPagina)(void);
+typedef int (WINAPI *FnModoPadrao)(void);
+typedef int (WINAPI *FnPosicaoImpressaoHorizontal)(int);
+typedef int (WINAPI *FnPosicaoImpressaoVertical)(int);
+typedef int (WINAPI *FnImprimeXMLSAT)(const char *, int);
+typedef int (WINAPI *FnImprimeXMLCancelamentoSAT)(const char *, const char *, int);
 
 static FnAbreConexaoImpressora AbreConexaoImpressora;
 static FnFechaConexaoImpressora FechaConexaoImpressora;
@@ -261,12 +261,15 @@ void imprimirXMLSAT(void) {
     }
 
     int retorno = ImprimeXMLSAT(dadosXML, 0);
-    int corte = Corte(5);
     free(dadosXML);
-    if (retorno == 0) printf("XML SAT enviado para impressao.\n");
-    else printf("Erro ao imprimir XML SAT. Codigo: %d\n", retorno);
-    if (corte == 0) printf("Corte realizado.\n");
-    else printf("Erro ao cortar papel. Codigo: %d\n", corte);
+    if (retorno == 0) {
+        printf("XML SAT enviado para impressao.\n");
+        int corte = Corte(5);
+        if (corte == 0) printf("Corte realizado.\n");
+        else printf("Erro ao cortar papel. Codigo: %d\n", corte);
+    } else {
+        printf("Erro ao imprimir XML SAT. Codigo: %d\n", retorno);
+    }
 }
 
 void imprimirXMLCancelamentoSAT(void) {
@@ -281,12 +284,15 @@ void imprimirXMLCancelamentoSAT(void) {
     }
 
     int retorno = ImprimeXMLCancelamentoSAT(dadosXML, ASS_QRCODE, 0);
-    int corte = Corte(5);
     free(dadosXML);
-    if (retorno == 0) printf("XML de cancelamento SAT enviado para impressao.\n");
-    else printf("Erro ao imprimir XML de cancelamento SAT. Codigo: %d\n", retorno);
-    if (corte == 0) printf("Corte realizado.\n");
-    else printf("Erro ao cortar papel. Codigo: %d\n", corte);
+    if (retorno == 0) {
+        printf("XML de cancelamento SAT enviado para impressao.\n");
+        int corte = Corte(5);
+        if (corte == 0) printf("Corte realizado.\n");
+        else printf("Erro ao cortar papel. Codigo: %d\n", corte);
+    } else {
+        printf("Erro ao imprimir XML de cancelamento SAT. Codigo: %d\n", retorno);
+    }
 }
 
 void abrirGavetaElgin(void) {
