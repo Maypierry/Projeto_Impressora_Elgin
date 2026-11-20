@@ -84,7 +84,7 @@ Consulte [docs/PLANO_DE_TESTES.md](docs/PLANO_DE_TESTES.md). Registre separadame
 - Enunciado: `Trabalho_C_Impressora.pdf` (adicionar em `docs/` se a divulgação for permitida).
 
 ## Autores
-- Guilherme da Silva Damas
+- Guilherme da Silva Damas.
 - Julia Mendonça da Silva
 - Matheus Henrique Lima da Silva
 - Mayara D'Assunção Silva
