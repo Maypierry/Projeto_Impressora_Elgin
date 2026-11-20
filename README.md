@@ -33,7 +33,7 @@ O programa possui login, menu de opções e comandos para imprimir textos, QR Co
 | 11 | Emitir sinal sonoro |
 | 0 | Sair |
 
-As operações que usam a impressora verificam se a conexão está aberta antes de pedir dados ou enviar comandos.
+As operações que usam a impressora verificam se a conexão está aberta antes de pedir dados ou enviar comandos. A impressão de texto permite informar a quantidade de cópias; cada cópia enviada com sucesso recebe seu próprio comando de corte. O sinal sonoro foi ajustado para `SinalSonoro(4, 10, 5)`.
 
 ## Arquivos na pasta de execução
 
@@ -45,7 +45,7 @@ Projeto_Impressora_Elgin/
 └── CANC_SAT.xml
 ```
 
-A DLL x64 e os dois XMLs devem estar na pasta de execução. O arquivo DLL incluído no ZIP enviado foi identificado como x64. Não publique a DLL ou o ZIP da biblioteca no repositório público sem autorização para redistribuição.
+A DLL x64 e os dois XMLs devem estar na pasta de execução. A DLL deve ser obtida da distribuição autorizada da Elgin e copiada para essa pasta; este commit atualiza o código e a documentação, mas não inclui o binário da DLL.
 
 ## Compilar e executar
 

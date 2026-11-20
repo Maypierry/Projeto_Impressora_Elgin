@@ -257,12 +257,18 @@ void imprimirTexto(void) {
         if (retorno >= 0) {
             algumaCopia = 1;
             printf("Copia %d enviada para impressao.\n", i);
-        } else printf("Erro ao imprimir texto. Codigo: %d\n", retorno);
-    }
-    if (algumaCopia) {
-        int corte = Corte(5);
-        if (corte == 0) printf("Corte realizado.\n");
-        else printf("Erro ao cortar papel. Codigo: %d\n", corte);
+
+            /*
+             * Finaliza cada copia separadamente. Assim, cada repeticao do
+             * comando gera uma copia completa, em vez de depender de um
+             * unico corte ao final do laco.
+             */
+            int corte = Corte(5);
+            if (corte == 0) printf("Corte da copia %d realizado.\n", i);
+            else printf("Erro ao cortar a copia %d. Codigo: %d\n", i, corte);
+        } else {
+            printf("Erro ao imprimir a copia %d. Codigo: %d\n", i, retorno);
+        }
     }
 }
 
@@ -371,7 +377,7 @@ void emitirSinalSonoro(void) {
         printf("Conexao fechada. Abra a conexao antes (opcao 2).\n");
         return;
     }
-    int retorno = SinalSonoro(4, 50, 5);
+    int retorno = SinalSonoro(4, 10, 5);
     if (retorno == 0) printf("Sinal sonoro enviado com sucesso.\n");
     else printf("Erro ao emitir sinal sonoro. Codigo: %d\n", retorno);
 }

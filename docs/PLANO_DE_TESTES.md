@@ -27,9 +27,9 @@ Use estes parâmetros de referência ao conferir o código e executar os testes:
 | Cancelamento SAT | `ImprimeXMLCancelamentoSAT(dadosXML, ASS_QRCODE, 0)`; liberar `dadosXML` com `free()` |
 | Gaveta Elgin | `AbreGavetaElgin(1, 50, 50)` |
 | Gaveta (outro comando) | `AbreGaveta(1, 5, 10)` |
-| Sinal sonoro | `SinalSonoro(4, 50, 5)` |
+| Sinal sonoro | `SinalSonoro(4, 10, 5)` |
 
-Os comandos em geral indicam sucesso com retorno `0`. A exceção descrita no PDF é `ImpressaoTexto`, em que o erro é indicado por retorno negativo.
+Os comandos em geral indicam sucesso com retorno `0`. A exceção descrita no PDF é `ImpressaoTexto`, em que o erro é indicado por retorno negativo. Na impressão de texto, o código agora executa `Corte(5)` após cada cópia enviada com sucesso; confirme esse comportamento no teste físico.
 
 ## Teste 1 — Inicialização e conexão da impressora
 
