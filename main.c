@@ -236,7 +236,8 @@ void fecharConexao(void) {
 
 void imprimirTexto(void) {
     char texto[200];
-    int copias, algumaCopia = 0;
+    char textoComQuebra[202];
+    int copias;
     if (!conexaoAberta) {
         printf("Conexao fechada. Abra a conexao antes (opcao 2).\n");
         return;
@@ -252,17 +253,19 @@ void imprimirTexto(void) {
         printf("A quantidade de copias deve ser maior que zero.\n");
         return;
     }
-    for (int i = 1; i <= copias; i++) {
-        int retorno = ImpressaoTexto(texto, 1, 4, 0);
-        if (retorno >= 0) {
-            algumaCopia = 1;
-            printf("Copia %d enviada para impressao.\n", i);
 
-            /*
-             * Finaliza cada copia separadamente. Assim, cada repeticao do
-             * comando gera uma copia completa, em vez de depender de um
-             * unico corte ao final do laco.
-             */
+    /*
+     * ImpressaoTexto envia os dados ao buffer da impressora. A documentacao
+     * Elgin informa que um LF (\n) descarrega esse buffer; sem ele, um
+     * comando seguinte pode apagar o texto pendente. Incluimos a quebra
+     * em cada copia para enviar o texto antes de executar o corte.
+     */
+    snprintf(textoComQuebra, sizeof(textoComQuebra), "%s\n", texto);
+
+    for (int i = 1; i <= copias; i++) {
+        int retorno = ImpressaoTexto(textoComQuebra, 1, 4, 0);
+        if (retorno >= 0) {
+            printf("Copia %d enviada para impressao.\n", i);
             int corte = Corte(5);
             if (corte == 0) printf("Corte da copia %d realizado.\n", i);
             else printf("Erro ao cortar a copia %d. Codigo: %d\n", i, corte);
@@ -271,7 +274,6 @@ void imprimirTexto(void) {
         }
     }
 }
-
 void imprimirQRCode(void) {
     char dados[500];
     int retorno, corte;
